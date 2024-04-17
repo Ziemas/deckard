@@ -1,0 +1,12 @@
+TOP_DIR = $(TUP_CWD)
+CC = powerpc-ps2-eabi-gcc
+CFLAGS = -std=gnu2x -O3 -G0 -g -fno-exceptions -fno-common -fno-strict-aliasing \
+         -fwrapv -Wall -Werror-implicit-function-declaration -fdiagnostics-color=always \
+         -mcpu=440 -ffreestanding -fno-builtin -nostartfiles -nostdlib
+INC = -I$(TOP_DIR)/include
+LIBS = -lgcc
+
+!cc = |> ^j^ $(CC) $(CFLAGS) $(INC) -c %f -o %o |> %B.o
+!as = |> $(CC) $(CFLAGS) $(INC) -c %f -o %o |> %B.o
+!ld = |> $(CC) %f -o %o $(CFLAGS) $(LDFLAGS) $(LIBS) |>
+!ar = |> ar crs %o %f |>

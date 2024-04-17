@@ -1,0 +1,8 @@
+include_rules
+OUT = $(TOP_DIR)/deckard.elf
+LDFLAGS += -Tlinkfile.ld
+INC += -Ilib/sysclib
+
+: foreach src/*.c |> !cc |>
+: foreach src/*.S |> !as |>
+: *.o lib/sysclib/sysclib.a |> !ld |> $(OUT)
