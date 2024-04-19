@@ -112,6 +112,27 @@ enum {
     GTE_REG_CYCLE = 0x82,
 };
 
+struct exec_result {
+    uint32 address;
+    uint8 flags;
+};
+
+static inline struct exec_result
+apu_exec(uint32 insn)
+{
+    struct exec_result res;
+    uint32 temp;
+
+    /* we need the flags from 24:27 */
+    __asm__ volatile("aexec %0, %3 \n"
+                     "mfcr %2 \n"
+                     "extrwi %1, %2, 4, 24 \n"
+                     : "=&r"(res.address), "=&r"(res.flags), "=&r"(temp)
+                     : "r"(insn));
+
+    return res;
+}
+
 static inline uint32
 apu_get_reg(uint32 reg)
 {
