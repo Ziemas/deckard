@@ -1,58 +1,111 @@
 #include "apu.h"
+#include "event.h"
+#include "list.h"
 #include "string.h"
 #include "types.h"
+#include "utils.h"
 
-uint32 unk[0x40][2];
+static LIST_HEAD(event_list);
+static LIST_HEAD(free_events);
+static struct event event_pool[24];
 
-void unk_gte(uint32 insn)
+void
+event_remove(struct event *evt)
 {
-    uint32 status;
+	evt->cb = NULL;
+	list_remove(&evt->evt_list);
 
-    while (1) {
-        do {
-            status = apu_mfgte(GTE_REG_STATUS);
-        } while (status & 7);
+	/* Theres more her but it makes no sense
+	 * given we cleared cb above */
 
-        if ((status & 0x1ffff0) == 0) {
-            apu_mtgte(GTE_REG_INSN, insn);
-            return;
-        }
+	// Silly, we just removed it
+	if (evt->cb != NULL) {
+		evt->cb(evt->param);
+	}
 
-        if ((status & 0x10) == 0) {
-            return;
-        }
-
-        status = apu_mfgte(GTE_REG_INSN);
-        if (unk[status & 0x3f][1] == 0) {
-            break;
-        }
-
-        apu_mtgte(GTE_REG_STATUS, 0x10);
-        insn = 0x80; // ???
-        apu_mtgte(GTE_REG_INSN, (status & ~unk[status & 0x3f][1]) | unk[status & 0x3f][0]);
-    }
+	list_insert(&free_events, &evt->evt_list);
 }
 
-void reset_apu_regs()
+struct event *
+event_add(int time, void *cb, uint32 param)
 {
-    /* Bugged originally, bad loop count and missing return */
-    for (int i = 0; i < 64; i++) {
-        apu_set_reg(0x40 + i, 0);
-    }
+	struct event *evt;
+
+	if (list_empty(&free_events)) {
+		return NULL;
+	}
+
+	evt = list_first_entry(&free_events, struct event, evt_list);
+	list_remove(&evt->evt_list);
+
+	evt->cb = cb;
+	evt->param = param;
+	evt->time = time + 0; // FIXME
+
+	list_insert(&event_list, &evt->evt_list);
+
+	return evt;
 }
 
-void reset_apu_gp()
+/* FIXME unfinished */
+void
+event_init()
 {
-    for (int i = 0; i < 32; i++) {
-        apu_mtgp(i, 0);
-    }
+	memset(event_pool, 0, sizeof(event_pool));
+
+	list_init(&event_list);
+	list_init(&free_events);
+
+	for (int i = 0; i < 24; i++) {
+		list_insert(&free_events, &event_pool[i].evt_list);
+	}
 }
 
-int deckard_main()
+void
+run()
 {
-    // printf("\n%s\n","D E C K A R D compiled Apr 12 2006 22:21:21");
+	struct event *evt;
 
-    memset(unk, 0, sizeof(unk));
+	if (!list_empty(&event_list)) {
+		evt = list_first_entry(&event_list, struct event, evt_list);
+	}
+}
 
-    return 0;
+#define UART_THR 0x01000200
+#define UART_LSR 0x01000205
+#define UART_THR_EMPTY 0x20
+
+void
+serial_putc(char c)
+{
+	write8(UART_THR, c);
+	__asm__ volatile("eieio");
+	while ((read8(UART_LSR) & UART_THR_EMPTY) == 0) {
+		__asm__ volatile("eieio");
+	}
+}
+
+void
+serial_puts(char *s)
+{
+	while (*s != '\0') {
+		serial_putc(*s);
+		s++;
+	}
+}
+
+int
+deckard_main()
+{
+	// printf("\n%s\n","D E C K A R D compiled Apr 12 2006 22:21:21");
+
+	// if (!insane_init_function()) {
+	//     return 1;
+	// }
+
+	while (1) {
+		run();
+	}
+
+	return 0;
 }

@@ -1,63 +1,85 @@
-    .section .vec.critical,"aw",@progbits
-critical_vector:
+    #include "macro.s"
+
+    .section .vec,"aw",@progbits
+    .p2align 4
+    .globl vectors
+vectors:
+    .p2align 4
+    .globl vec_crit
+vec_crit:
     rfci
 
-    .section .vec.machine,"aw",@progbits
-machine_vector:
+    .p2align 4
+    .globl vec_machine
+vec_machine:
     rfci
 
-    .section .vec.data_stor,"aw",@progbits
-data_stor_vector:
+    .p2align 4
+    .globl vec_data_stor
+vec_data_stor:
     rfi
 
-    .section .vec.insn_stor,"aw",@progbits
-insn_stor_vector:
+    .p2align 4
+    .globl vec_insn_stor
+vec_insn_stor:
     rfi
 
-    .section .vec.ext_int,"aw",@progbits
-ext_int_vector:
+    .p2align 4
+    .globl vec_ext
+vec_ext:
     rfi
 
-    .section .vec.align,"aw",@progbits
-align_vector:
+    .p2align 4
+    .globl vec_align
+vec_align:
     rfi
 
-    .section .vec.program,"aw",@progbits
-program_vector:
+    .p2align 4
+    .globl vec_program
+vec_program:
     rfi
 
-    .section .vec.fpu,"aw",@progbits
-fpu_unavail_vector:
+    .p2align 4
+    .globl vec_fpu
+vec_fpu:
     rfi
 
-    .section .vec.syscall,"aw",@progbits
-syscall_vector:
+    .p2align 4
+    .globl vec_syscall
+vec_syscall:
     rfi
 
-    .section .vec.apu,"aw",@progbits
-apu_unavail_vector:
+    .p2align 4
+    .globl vec_apu
+vec_apu:
     rfi
 
-    .section .vec.pit,"aw",@progbits
-pit_vector:
+    .p2align 4
+    .globl vec_decr
+vec_decr:
     rfi
 
-    .section .vec.fit,"aw",@progbits
-fit_vector:
+    .p2align 4
+    .globl vec_fit
+vec_fit:
     rfi
 
-    .section .vec.watchdog,"aw",@progbits
-watchdog_vector:
+    .p2align 4
+    .globl vec_watchdog
+vec_watchdog:
     rfci
 
-    .section .vec.data_tlb,"aw",@progbits
-data_tlb_vector:
+    .p2align 4
+    .globl vec_data_tlb
+vec_data_tlb:
     rfi
 
-    .section .vec.insn_tlb,"aw",@progbits
-insn_tlb_vector:
+    .p2align 4
+    .globl vec_insn_tlb
+vec_insn_tlb:
     rfi
 
-    .section .vec.debug,"aw",@progbits
-debug_vector:
+    .p2align 4
+    .globl vec_debug
+vec_debug:
     rfci

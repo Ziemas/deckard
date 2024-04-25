@@ -10,7 +10,6 @@
 #define FIELD_PREP(field, val) ((val) * (_FIELD_LSB(field)))
 #define FIELD_GET(field, val) (((val) & (field)) / _FIELD_LSB(field))
 
-
 static inline uint32
 read32(uint32 addr)
 {
@@ -19,10 +18,26 @@ read32(uint32 addr)
 	return *a;
 }
 
+static inline uint8
+read8(uint32 addr)
+{
+	volatile uint8 *a = (volatile uint8 *)addr;
+
+	return *a;
+}
+
 static inline void
 write32(uint32 addr, uint32 data)
 {
 	volatile uint32 *a = (volatile uint32 *)addr;
+
+	*a = data;
+}
+
+static inline void
+write8(uint32 addr, uint8 data)
+{
+	volatile uint8 *a = (volatile uint8 *)addr;
 
 	*a = data;
 }
@@ -69,8 +84,5 @@ poll32(uint32 addr, uint32 mask, uint32 target)
 		}
 	}
 }
-
-
-
 
 #endif // UTILS_H_

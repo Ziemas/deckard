@@ -3,7 +3,7 @@ CC = powerpc-ps2-eabi-gcc
 CFLAGS = -std=gnu2x -O3 -G0 -g -fno-exceptions -fno-common -fno-strict-aliasing \
          -fwrapv -Wall -Werror-implicit-function-declaration -fdiagnostics-color=always \
          -mcpu=440 -ffreestanding -fno-builtin -nostartfiles -nostdlib
-INC = -I$(TOP_DIR)/include
+INC = -I$(TOP_DIR)/include -I$(TOP_DIR)/src
 LIBS = -lgcc
 
 !cc = |> ^j^ $(CC) $(CFLAGS) $(INC) -c %f -o %o |> %B.o

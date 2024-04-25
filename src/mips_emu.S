@@ -1,12 +1,4 @@
-
-    .macro b_logic label
-blt cr6, \label
-    .endm
-
-    .macro laddr reg label
-lis \reg, \label@ha
-ori \reg, \reg, \label@l
-    .endm
+    #include "macro.s"
 
     /* Mips emulator using hardware APU hardware assistance*/
     /* Fixed registers: */
@@ -17,8 +9,8 @@ ppc_stack_save: .word 0
 unk1:           .word 0
 
     .text
-    .globl mips_run
-mips_run:
+    .globl mips_run_a
+mips_run_a:
     mflr    %r0
     mfcr    %r12
     // allocate 64 bytes of stack space
