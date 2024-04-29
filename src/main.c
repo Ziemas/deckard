@@ -5,6 +5,8 @@
 #include "types.h"
 #include "utils.h"
 
+char kernel_stack[0x800] __attribute__((aligned(16)));
+
 static LIST_HEAD(event_list);
 static LIST_HEAD(free_events);
 static struct event event_pool[24];

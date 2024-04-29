@@ -64,6 +64,10 @@ _start:
     mtsprg6 %r3
     mtsprg7 %r3
 
+    laddr %r1, kernel_stack
+    /* Kernel stack size */
+    addi %r1, %r1, 0x800
+
     laddr %r0, deckard_main
     mtlr %r0
     blr
