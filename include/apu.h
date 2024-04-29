@@ -113,12 +113,12 @@ enum {
 };
 
 struct exec_result {
-	uint32 address;
-	uint8 flags;
+	u32 address;
+	u8 flags;
 };
 
 static inline struct exec_result
-apu_exec(uint32 insn)
+apu_exec(u32 insn)
 {
 	struct exec_result res;
 
@@ -133,10 +133,10 @@ apu_exec(uint32 insn)
 }
 
 // static inline struct exec_result
-// apu_exec(uint32 insn)
+// apu_exec(u32 insn)
 //{
 //     struct exec_result res;
-//     uint32 temp;
+//     u32 temp;
 //
 //     /* we need the flags from 24:27 */
 //     __asm__ volatile("aexec %0, %3 \n"
@@ -148,10 +148,10 @@ apu_exec(uint32 insn)
 //     return res;
 // }
 
-static inline uint32
-apu_get_reg(uint32 reg)
+static inline u32
+apu_get_reg(u32 reg)
 {
-	uint32 data;
+	u32 data;
 
 	__asm__ volatile("mtdcr 0x180, %1 \n"
 					 "mfdcr %0, 0x181 \n"
@@ -162,7 +162,7 @@ apu_get_reg(uint32 reg)
 }
 
 static inline void
-apu_set_reg(uint32 reg, uint32 val)
+apu_set_reg(u32 reg, u32 val)
 {
 	__asm__ volatile("mtdcr 0x180, %0 \n"
 					 "mtdcr 0x181, %1 \n"
@@ -170,10 +170,10 @@ apu_set_reg(uint32 reg, uint32 val)
 					 : "r"(reg), "r"(val));
 }
 
-static inline uint32
-apu_get_gte(uint32 reg)
+static inline u32
+apu_get_gte(u32 reg)
 {
-	uint32 data;
+	u32 data;
 
 	__asm__ volatile("mtdcr 0x21, %1 \n"
 					 "mfdcr %0, 0x22 \n"
@@ -184,7 +184,7 @@ apu_get_gte(uint32 reg)
 }
 
 static inline void
-apu_set_gte(uint32 reg, uint32 val)
+apu_set_gte(u32 reg, u32 val)
 {
 	__asm__ volatile("mtdcr 0x21, %0 \n"
 					 "mtdcr 0x22, %1 \n"
@@ -192,86 +192,86 @@ apu_set_gte(uint32 reg, uint32 val)
 					 : "r"(reg), "r"(val));
 }
 
-static inline uint32
-apu_mfgp(uint32 gpr)
+static inline u32
+apu_mfgp(u32 gpr)
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amfgp %0, %1 \n" : "=&r"(res) : "r"(gpr) :);
 	return res;
 }
 
 static inline void
-apu_mtgp(uint32 gpr, uint32 value)
+apu_mtgp(u32 gpr, u32 value)
 {
 	__asm__ volatile("amtgp %0, %1 \n" : : "r"(gpr), "r"(value) :);
 }
 
-static inline uint32
-apu_mfgte(uint32 reg)
+static inline u32
+apu_mfgte(u32 reg)
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amfgte %0, %1 \n" : "=&r"(res) : "r"(reg) :);
 	return res;
 }
 
 static inline void
-apu_mtgte(uint32 reg, uint32 value)
+apu_mtgte(u32 reg, u32 value)
 {
 	__asm__ volatile("amtgte %0, %1 \n" : : "r"(reg), "r"(value) :);
 }
 
-static inline uint32
+static inline u32
 apu_mfhi()
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amfhi %0 \n" : "=&r"(res) : :);
 	return res;
 }
 
 static inline void
-apu_mthi(uint32 value)
+apu_mthi(u32 value)
 {
 	__asm__ volatile("amthi %0 \n" : : "r"(value) :);
 }
 
-static inline uint32
+static inline u32
 apu_mflo()
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amflo %0 \n" : "=&r"(res) : :);
 	return res;
 }
 
 static inline void
-apu_mtlo(uint32 value)
+apu_mtlo(u32 value)
 {
 	__asm__ volatile("amtlo %0 \n" : : "r"(value) :);
 }
 
-static inline uint32
+static inline u32
 apu_mfpc()
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amfpc %0 \n" : "=&r"(res) : :);
 	return res;
 }
 
 static inline void
-apu_mtpc(uint32 value)
+apu_mtpc(u32 value)
 {
 	__asm__ volatile("amtpc %0 \n" : : "r"(value) :);
 }
 
-static inline uint32
+static inline u32
 apu_mfcc()
 {
-	uint32 res;
+	u32 res;
 	__asm__ volatile("amfcc %0 \n" : "=&r"(res) : :);
 	return res;
 }
 
 static inline void
-apu_mtcc(uint32 value)
+apu_mtcc(u32 value)
 {
 	__asm__ volatile("amtcc %0 \n" : : "r"(value) :);
 }

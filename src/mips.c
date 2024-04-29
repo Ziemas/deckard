@@ -2,7 +2,7 @@
 #include "types.h"
 #include "utils.h"
 
-uint32 unk[0x40][2];
+u32 unk[0x40][2];
 
 void
 reset_apu_regs()
@@ -22,9 +22,9 @@ reset_apu_gp()
 }
 
 void
-unk_gte(uint32 insn)
+unk_gte(u32 insn)
 {
-	uint32 status;
+	u32 status;
 
 	while (1) {
 		do {
@@ -56,8 +56,8 @@ int
 mips_run()
 {
 	struct exec_result res;
-	uint32 pc = apu_mfpc();
-	uint32 *insn = (uint32 *)pc;
+	u32 pc = apu_mfpc();
+	u32 *insn = (u32 *)pc;
 
 	do {
 		res = apu_exec(*insn);

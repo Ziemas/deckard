@@ -27,7 +27,7 @@ event_remove(struct event *evt)
 }
 
 struct event *
-event_add(int time, void *cb, uint32 param)
+event_add(int time, void *cb, u32 param)
 {
 	struct event *evt;
 
