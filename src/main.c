@@ -3,7 +3,11 @@
 #include "list.h"
 #include "string.h"
 #include "types.h"
+#include "umm_malloc.h"
 #include "utils.h"
+
+extern char *_start_bss;
+extern char *_end_bss;
 
 char kernel_stack[0x800] __attribute__((aligned(16)));
 
@@ -99,7 +103,13 @@ serial_puts(char *s)
 int
 deckard_main()
 {
-	// printf("\n%s\n","D E C K A R D compiled Apr 12 2006 22:21:21");
+	for (char *dst = _start_bss; dst < _end_bss; dst++) {
+		*dst = 0;
+	}
+
+	umm_init();
+
+	// printf("\n%s\n", "D E C K A R D compiled Apr 12 2006 22:21:21");
 
 	// if (!insane_init_function()) {
 	//     return 1;

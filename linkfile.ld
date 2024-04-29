@@ -6,6 +6,11 @@ MEMORY
 	/*ram (rwx) : org = 0x00a02000, len = 1m*/
 }
 
+PHDRS
+{
+	text PT_LOAD;
+}
+
 ENTRY(_start);
 
 SECTIONS {
@@ -14,39 +19,44 @@ SECTIONS {
 	.text : {
 		*(.text_entry)
 		*(.text)
-	} > ram
+	} > ram :text
 
 	.rodata ALIGN(4) : {
 		*(.rodata)
-	} > ram
+	} > ram :text
 
 	.data ALIGN(4) : {
 		*(.data)
-	} > ram
+	} > ram :text
 
 	.sdata ALIGN(4) : {
 		*(.sdata)
-	} > ram
+	} > ram :text
 
 	.sdata2 ALIGN(4) : {
 		*(.sdata2)
-	} > ram
+	} > ram :text
 
 	.bss ALIGN(4) : {
 		_start_bss  = . ;
 		*(COMMON)
 		*(.bss)
-	} >ram
+	} > ram :text
 
 	.sbss ALIGN(4) : {
 		*(.sbss)
-	} > ram
+	} > ram :text
 	_end_bss = . ;
 
 	.comment ALIGN(4) : {
 		*(.comment)
-	} > ram
+	} > ram :text
 
+	. = ALIGN(4);
+	PROVIDE(UMM_MALLOC_CFG_HEAP_ADDR = .);
+	_heap_start = .;
+	. = 0x00a00000 + 1m;
 
-	PROVIDE(__stack = 0x00bdf000);
+	PROVIDE(UMM_MALLOC_CFG_HEAP_SIZE = . - _heap_start);
+
 }

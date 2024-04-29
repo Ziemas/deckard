@@ -1,0 +1,5 @@
+include_rules
+INC += -I.
+
+: foreach *.c |> !cc |>
+: *.o |> !ar |> malloc.a

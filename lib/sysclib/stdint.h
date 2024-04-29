@@ -16,6 +16,8 @@
 #ifndef __STDINT_H__
 #define __STDINT_H__
 
+#define INT16_MAX ((short)0x7fff)
+
 typedef signed char int8_t;
 typedef short int16_t;
 typedef long int32_t;
